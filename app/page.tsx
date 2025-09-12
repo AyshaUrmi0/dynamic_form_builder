@@ -3,6 +3,7 @@ import Navbar from "@/component/Navbar";
 import SidebarLeft from "@/component/SidebarLeft";
 import SidebarRight from "@/component/SidebarRight";
 
+import formData from "@/data/formSchema.json"
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
         <SidebarLeft />
 
         {/* Canvas */}
-        <FormCanvas />
+        <FormCanvas  formData={formData} />
 
         {/* Right Sidebar */}
         <SidebarRight />
