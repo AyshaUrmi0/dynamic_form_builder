@@ -1,0 +1,29 @@
+
+{
+  "id": "777w5d35",
+  "version": "1.0.0",
+  "name": "Custom Form",
+  "toEmail": "test@dorik.io",
+  "subject": "Custom Form from Dorik",
+  "successMessage": "Successful Form Submission",
+  "fields": [
+    {
+      "id": "mffkcgsa",
+      "label": "Name",
+      "name": "name",
+      "placeholder": "Enter your Name",
+      "type": "text",
+      "required": true,
+      "columnWidth": "50%"
+    },
+    {
+      "id": "72hje740",
+      "type": "email",
+      "label": "Email",
+      "placeholder": "Your Email Address",
+      "name": "email",
+      "required": true,
+      "columnWidth": "50%"
+    }
+  ]
+}
