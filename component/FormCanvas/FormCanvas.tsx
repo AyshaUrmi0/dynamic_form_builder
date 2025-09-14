@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useDroppable } from "@dnd-kit/core"
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import DraggableFormField from "./DraggableFormField"
 import EmptyState from "./EmptyState"
 import { FormCanvasProps } from "./types"
@@ -36,15 +37,19 @@ export default function FormCanvas({
         {fields.length === 0 ? (
           <EmptyState />
         ) : (
-          fields.map((field) => (
-            <DraggableFormField
-              key={field.id}
-              field={field}
-              onEdit={onEditField}
-              onDelete={onDeleteField}
-              onDuplicate={onDuplicateField}
-            />
-          ))
+          <SortableContext items={fields.map(field => `form-field-${field.id}`)} strategy={verticalListSortingStrategy}>
+            <div className="grid grid-cols-1 gap-4">
+              {fields.map((field) => (
+                <DraggableFormField
+                  key={field.id}
+                  field={field}
+                  onEdit={onEditField}
+                  onDelete={onDeleteField}
+                  onDuplicate={onDuplicateField}
+                />
+              ))}
+            </div>
+          </SortableContext>
         )}
       </div>
     </div>

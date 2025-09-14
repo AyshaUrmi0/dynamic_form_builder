@@ -32,14 +32,23 @@ export default function FormPreview({
           </div>
         ) : (
           <form onSubmit={onFormSubmit} className="space-y-6">
-            {fields.map((field) => (
-              <PreviewField
-                key={field.id}
-                field={field}
-                value={formValues[field.name || ''] || ''}
-                onChange={(value) => onInputChange(field.name || '', value)}
-              />
-            ))}
+            <div className="flex flex-wrap gap-4">
+              {fields.map((field) => (
+                <div 
+                  key={field.id}
+                  style={{
+                    width: field.columnWidth || '100%',
+                    maxWidth: field.columnWidth || '100%'
+                  }}
+                >
+                  <PreviewField
+                    field={field}
+                    value={formValues[field.name || ''] || ''}
+                    onChange={(value) => onInputChange(field.name || '', value)}
+                  />
+                </div>
+              ))}
+            </div>
             
             <button
               type="submit"

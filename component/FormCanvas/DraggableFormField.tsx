@@ -31,8 +31,12 @@ export default function DraggableFormField({
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className={`border-2 border-gray-200 rounded-lg p-4 mb-3 bg-white shadow-sm hover:shadow-md transition-shadow group relative ${isDragging ? "opacity-50 shadow-lg" : ""}`}
+      style={{
+        ...style,
+        width: field.columnWidth || '100%',
+        maxWidth: field.columnWidth || '100%'
+      }}
+      className={`border-2 border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow group relative cursor-move ${isDragging ? "opacity-50 shadow-lg" : ""}`}
     >
       <FieldActions 
         field={field}
@@ -41,7 +45,8 @@ export default function DraggableFormField({
         onDuplicate={onDuplicate}
       />
 
-      <strong className="text-gray-800 text-lg mb-2 block pr-16">
+      <strong className="text-gray-800 text-lg mb-2 block pr-16" {...attributes} {...listeners}>
+        <span className="inline-block mr-2 text-gray-400">⋮⋮</span>
         {field.label || field.type}
       </strong>
       

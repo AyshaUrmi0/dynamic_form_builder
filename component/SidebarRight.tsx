@@ -61,8 +61,8 @@ export default function SidebarRight({
   if (!selectedField) {
     return (
       <aside className="w-64 border-l border-gray-300 p-4 bg-gray-50">
-        <h2 className="font-semibold mb-4 text-gray-800 text-lg">Field Settings</h2>
-        <div className="text-center py-8 text-gray-500">
+        <h2 className="font-semibold mb-4 text-gray-900 text-lg">Field Settings</h2>
+        <div className="text-center py-8 text-gray-600">
           <div className="text-4xl mb-2">⚙️</div>
           <p>Select a field to edit its settings</p>
         </div>
@@ -72,32 +72,32 @@ export default function SidebarRight({
 
   return (
     <aside className="w-64 border-l border-gray-300 p-4 bg-gray-50 overflow-y-auto">
-      <h2 className="font-semibold mb-4 text-gray-800 text-lg">Field Settings</h2>
+      <h2 className="font-semibold mb-4 text-gray-900 text-lg">Field Settings</h2>
       
       <div className="bg-white p-4 rounded-lg border border-gray-200 space-y-4">
         <div>
-          <h3 className="font-medium text-gray-700 mb-2">{selectedField.type} Field</h3>
+          <h3 className="font-medium text-gray-800 mb-2">{selectedField.type} Field</h3>
         </div>
 
         {/* Basic Settings */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Label</label>
+          <label className="block text-sm font-medium text-gray-800 mb-1">Label</label>
           <input
             type="text"
             value={formData.label}
             onChange={(e) => setFormData(prev => ({ ...prev, label: e.target.value }))}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
             placeholder="Field label"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <label className="block text-sm font-medium text-gray-800 mb-1">Name</label>
           <input
             type="text"
             value={formData.name}
             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
             placeholder="Field name"
           />
         </div>
@@ -105,12 +105,12 @@ export default function SidebarRight({
         {/* Placeholder for text inputs */}
         {(selectedField.type === 'text' || selectedField.type === 'email' || selectedField.type === 'select') && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Placeholder</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Placeholder</label>
             <input
               type="text"
               value={formData.placeholder}
               onChange={(e) => setFormData(prev => ({ ...prev, placeholder: e.target.value }))}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               placeholder="Placeholder text"
             />
           </div>
@@ -125,17 +125,17 @@ export default function SidebarRight({
               onChange={(e) => setFormData(prev => ({ ...prev, required: e.target.checked }))}
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <span className="text-sm font-medium text-gray-700">Required field</span>
+            <span className="text-sm font-medium text-gray-800">Required field</span>
           </label>
         </div>
 
         {/* Column Width */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Column Width</label>
+          <label className="block text-sm font-medium text-gray-800 mb-1">Column Width</label>
           <select
             value={formData.columnWidth}
             onChange={(e) => setFormData(prev => ({ ...prev, columnWidth: e.target.value }))}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
           >
             <option value="25%">25%</option>
             <option value="33%">33%</option>
@@ -149,7 +149,7 @@ export default function SidebarRight({
         {/* Options for select, checkbox, radio */}
         {(selectedField.type === 'select' || selectedField.type === 'checkbox' || selectedField.type === 'radio') && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Options</label>
+            <label className="block text-sm font-medium text-gray-800 mb-2">Options</label>
             <div className="space-y-2">
               {formData.options.map((option, index) => (
                 <div key={index} className="flex space-x-2">
@@ -157,7 +157,7 @@ export default function SidebarRight({
                     type="text"
                     value={option}
                     onChange={(e) => handleOptionChange(index, e.target.value)}
-                    className="flex-1 border border-gray-300 rounded px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    className="flex-1 border border-gray-300 rounded px-2 py-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                     placeholder="Label=value"
                   />
                   <button
@@ -175,18 +175,21 @@ export default function SidebarRight({
                 + Add Option
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Format: "Display Text=value"</p>
+            <div className="mt-2 p-2 bg-blue-50 rounded text-xs text-blue-800">
+              <strong>Format:</strong> "Display Text=value"<br/>
+              <strong>Example:</strong> "Option 1=option1"
+            </div>
           </div>
         )}
 
         {/* Content for acceptance field */}
         {selectedField.type === 'acceptance' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+            <label className="block text-sm font-medium text-gray-800 mb-1">Content</label>
             <textarea
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               rows={3}
               placeholder="Acceptance text or HTML"
             />
