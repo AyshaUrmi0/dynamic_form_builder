@@ -5,11 +5,11 @@ import PreviewField from "./PreviewField"
 
 interface FormPreviewProps {
   fields: Field[]
-  formValues: any
+  formValues: Record<string, string | number | boolean | readonly string[] | undefined>
   isSubmitted: boolean
   successMessage?: string
   onFormSubmit: (e: React.FormEvent) => void
-  onInputChange: (fieldName: string, value: any) => void
+  onInputChange: (fieldName: string, value: string | number | boolean | readonly string[] | undefined) => void
 }
 
 export default function FormPreview({ 

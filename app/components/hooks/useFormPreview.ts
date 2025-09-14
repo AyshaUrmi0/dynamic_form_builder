@@ -4,7 +4,7 @@ import { useState } from "react"
 
 export function useFormPreview() {
   const [isPreviewMode, setIsPreviewMode] = useState(false)
-  const [formValues, setFormValues] = useState<any>({})
+  const [formValues, setFormValues] = useState<Record<string, string | number | boolean | readonly string[] | undefined>>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const togglePreviewMode = () => {
@@ -19,8 +19,8 @@ export function useFormPreview() {
     console.log('Form submitted with data:', formValues)
   }
 
-  const handleInputChange = (fieldName: string, value: any) => {
-    setFormValues((prev: any) => ({ ...prev, [fieldName]: value }))
+  const handleInputChange = (fieldName: string, value: string | number | boolean | readonly string[] | undefined) => {
+    setFormValues((prev: Record<string, string | number | boolean | readonly string[] | undefined>) => ({ ...prev, [fieldName]: value }))
   }
 
   const resetForm = () => {

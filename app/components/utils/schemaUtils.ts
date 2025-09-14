@@ -3,7 +3,7 @@ import { Field } from "@/component/FormCanvas/types"
 export interface FormSchema {
   fields: Field[]
   successMessage?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export const exportSchema = (schema: FormSchema, filename: string = 'form-schema.json') => {

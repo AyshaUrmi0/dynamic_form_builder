@@ -1,5 +1,6 @@
 "use client"
 
+import { DragEndEvent } from "@dnd-kit/core"
 import { Field } from "@/component/FormCanvas/types"
 
 interface DragHandlerProps {
@@ -10,7 +11,7 @@ interface DragHandlerProps {
 }
 
 export function createDragHandler({ fields, onAddField, onInsertField, onReorderFields }: DragHandlerProps) {
-  return (event: any) => {
+  return (event: DragEndEvent) => {
     const { active, over } = event
 
     console.log('Drag end event:', { active: active?.id, over: over?.id })
@@ -22,9 +23,9 @@ export function createDragHandler({ fields, onAddField, onInsertField, onReorder
     }
 
     // Check if dropping a new field from sidebar
-    if (active.id.startsWith('field-')) {
-      const fieldType = active.data.current?.type
-      const fieldLabel = active.data.current?.label
+    if (String(active.id).startsWith('field-')) {
+      const fieldType = active.data?.current?.type
+      const fieldLabel = active.data?.current?.label
 
       console.log('Dropping new field:', { fieldType, fieldLabel, dropTarget: over.id })
 
@@ -44,8 +45,8 @@ export function createDragHandler({ fields, onAddField, onInsertField, onReorder
           onAddField(newField)
         }
         // If dropping on an existing field, insert before that field
-        else if (over.id.startsWith('form-field-')) {
-          const targetFieldId = over.id.replace('form-field-', '')
+        else if (String(over.id).startsWith('form-field-')) {
+          const targetFieldId = String(over.id).replace('form-field-', '')
           const targetIndex = fields.findIndex(field => field.id === targetFieldId)
           
           if (targetIndex !== -1) {
@@ -63,9 +64,9 @@ export function createDragHandler({ fields, onAddField, onInsertField, onReorder
     }
 
     // Check if reordering existing fields
-    if (active.id.startsWith('form-field-') && over.id.startsWith('form-field-')) {
-      const activeIndex = fields.findIndex(field => field.id === active.id.replace('form-field-', ''))
-      const overIndex = fields.findIndex(field => field.id === over.id.replace('form-field-', ''))
+    if (String(active.id).startsWith('form-field-') && String(over.id).startsWith('form-field-')) {
+      const activeIndex = fields.findIndex(field => field.id === String(active.id).replace('form-field-', ''))
+      const overIndex = fields.findIndex(field => field.id === String(over.id).replace('form-field-', ''))
 
       console.log('Reordering fields:', { activeIndex, overIndex })
 

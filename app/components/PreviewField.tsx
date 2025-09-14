@@ -4,8 +4,8 @@ import { Field } from "@/component/FormCanvas/types"
 
 interface PreviewFieldProps {
   field: Field
-  value: any
-  onChange: (value: any) => void
+  value: string | number | boolean | readonly string[] | undefined
+  onChange: (value: string | number | boolean | readonly string[] | undefined) => void
 }
 
 export default function PreviewField({ field, value, onChange }: PreviewFieldProps) {
@@ -17,7 +17,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           <input
             type={field.type}
             name={field.name}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder || `Enter ${field.type}...`}
             required={field.required}
@@ -29,7 +29,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           <input 
             type="date" 
             name={field.name}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             required={field.required}
             className="border-2 border-gray-300 rounded-lg p-3 w-full bg-white text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors" 
@@ -40,7 +40,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           <input 
             type="time" 
             name={field.name}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             required={field.required}
             className="border-2 border-gray-300 rounded-lg p-3 w-full bg-white text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors" 
@@ -50,7 +50,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
         return (
           <select 
             name={field.name}
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             required={field.required}
             className="border-2 border-gray-300 rounded-lg p-3 w-full bg-white text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors"
@@ -71,7 +71,8 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
           <div className="space-y-2">
             {field.options?.map((option: string, index: number) => {
               const [label, val] = option.split('=')
-              const isChecked = Array.isArray(value) ? value.includes(val || label) : false
+              const currentValue = Array.isArray(value) ? value : []
+              const isChecked = currentValue.includes(val || label)
               return (
                 <div key={index} className="flex items-center space-x-2">
                   <input 
@@ -137,7 +138,7 @@ export default function PreviewField({ field, value, onChange }: PreviewFieldPro
               <input 
                 type="checkbox" 
                 name={field.name}
-                checked={value}
+                checked={typeof value === 'boolean' ? value : false}
                 onChange={(e) => onChange(e.target.checked)}
                 required={field.required}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" 

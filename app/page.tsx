@@ -1,4 +1,4 @@
-import { FormBuilder } from "./components"
+import FormBuilder from "./components/FormBuilder"
 import formData from "@/data/formSchema.json"
 
 export default function Home() {

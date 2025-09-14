@@ -1,6 +1,6 @@
 "use client"
 
-import FormCanvas from "@/component/FormCanvas"
+import FormCanvas from "@/component/FormCanvas/FormCanvas"
 import Navbar from "@/component/Navbar"
 import SidebarLeft from "@/component/SidebarLeft"
 import SidebarRight from "@/component/SidebarRight"
@@ -9,11 +9,12 @@ import { DndContext } from "@dnd-kit/core"
 import { useFormBuilder } from "./hooks/useFormBuilder"
 import { useFormPreview } from "./hooks/useFormPreview"
 import { createDragHandler } from "./DragHandler"
-import { exportSchema, importSchema, resetToDefaultSchema } from "./utils/schemaUtils"
+import { exportSchema, importSchema } from "./utils/schemaUtils"
+
 import { Field } from "@/component/FormCanvas/types"
 
 interface FormBuilderProps {
-  formData: any
+  formData: { fields?: Field[]; successMessage?: string; [key: string]: unknown }
 }
 
 export default function FormBuilder({ formData }: FormBuilderProps) {
@@ -37,8 +38,7 @@ export default function FormBuilder({ formData }: FormBuilderProps) {
     isSubmitted,
     togglePreviewMode,
     handleFormSubmit,
-    handleInputChange,
-    resetForm
+    handleInputChange
   } = useFormPreview()
 
   const handleDragEnd = createDragHandler({
