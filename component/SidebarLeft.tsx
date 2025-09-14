@@ -22,37 +22,19 @@ export default function SidebarLeft() {
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
-    return (
-      <aside className="w-48 border-r border-gray-300 p-4 bg-gray-50">
-        <h2 className="font-semibold mb-4 text-gray-800 text-lg">Form Fields</h2>
-        <div className="space-y-3">
-          {fieldTypes.map((field) => (
-            <div
-              key={field.type}
-              className="p-3 border-2 border-gray-300 rounded-lg bg-white text-gray-800 font-medium"
-            >
-              {field.label}
-            </div>
-          ))}
-        </div>
-      </aside>
-    )
-  }
-
   return (
     <aside className="w-48 border-r border-gray-300 p-4 bg-gray-50">
       <h2 className="font-semibold mb-4 text-gray-800 text-lg">Form Fields</h2>
       <div className="space-y-3">
         {fieldTypes.map((field) => (
-          <DraggableField key={field.type} field={field} />
+          <DraggableField key={field.type} field={field} isMounted={isMounted} />
         ))}
       </div>
     </aside>
   )
 }
 
-function DraggableField({ field }: { field: { type: string; label: string } }) {
+function DraggableField({ field, isMounted }: { field: { type: string; label: string }, isMounted: boolean }) {
   const {
     attributes,
     listeners,
@@ -70,6 +52,15 @@ function DraggableField({ field }: { field: { type: string; label: string } }) {
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
+
+  // Show static version during SSR, draggable version after hydration
+  if (!isMounted) {
+    return (
+      <div className="p-3 border-2 border-gray-300 rounded-lg bg-white text-gray-800 font-medium">
+        {field.label}
+      </div>
+    )
+  }
 
   return (
     <div

@@ -176,12 +176,16 @@ export default function Home() {
   const [fields, setFields] = useState<any[]>([])
   const [selectedField, setSelectedField] = useState<any>(null)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
-  const [formData, setFormData] = useState<any>({})
+  const [formValues, setFormValues] = useState<any>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
+    // Load initial fields from JSON schema
+    if (formData.fields && formData.fields.length > 0) {
+      setFields(formData.fields)
+    }
   }, [])
 
   const handleDragEnd = (event: any) => {
@@ -267,11 +271,11 @@ export default function Home() {
     e.preventDefault()
     setIsSubmitted(true)
     // In a real app, you would send this data to a server
-    console.log('Form submitted with data:', formData)
+    console.log('Form submitted with data:', formValues)
   }
 
   const handleInputChange = (fieldName: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [fieldName]: value }))
+    setFormValues((prev: any) => ({ ...prev, [fieldName]: value }))
   }
 
   if (!isMounted) {
@@ -339,7 +343,7 @@ export default function Home() {
                       <PreviewField
                         key={field.id}
                         field={field}
-                        value={formData[field.name] || ''}
+                        value={formValues[field.name] || ''}
                         onChange={(value) => handleInputChange(field.name, value)}
                       />
                     ))}
@@ -354,11 +358,11 @@ export default function Home() {
                 )}
 
                 {/* Show submitted data */}
-                {isSubmitted && Object.keys(formData).length > 0 && (
+                {isSubmitted && Object.keys(formValues).length > 0 && (
                   <div className="mt-8 bg-white p-6 rounded-lg border border-gray-200">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">Submitted Data</h3>
                     <div className="space-y-2">
-                      {Object.entries(formData).map(([key, value]) => (
+                      {Object.entries(formValues).map(([key, value]) => (
                         <div key={key} className="flex justify-between py-2 border-b border-gray-100">
                           <span className="font-medium text-gray-600">{key}:</span>
                           <span className="text-gray-800">{String(value)}</span>
