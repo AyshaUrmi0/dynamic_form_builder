@@ -30,31 +30,24 @@ export default function FormCanvas({
   onDeleteField: (fieldId: string) => void
   onDuplicateField: (field: Field) => void
 }) {
-  const [isMounted, setIsMounted] = useState(false)
-  const { setNodeRef } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: 'form-canvas',
   })
 
+  // Debug logging
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return (
-      <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Form Canvas</h2>
-        <div className="min-h-96">
-          <div className="text-center py-12 text-gray-500">
-            <div className="text-6xl mb-4">📝</div>
-            <p className="text-lg">Drag form fields from the sidebar to start building your form</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
+    if (isOver) {
+      console.log('FormCanvas: Drop zone is being hovered over')
+    }
+  }, [isOver])
 
   return (
-    <div ref={setNodeRef} className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <div 
+      ref={setNodeRef} 
+      className={`flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen transition-colors ${
+        isOver ? 'bg-blue-100' : ''
+      }`}
+    >
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Form Canvas</h2>
       <div className="min-h-96">
         {fields.length === 0 ? (
@@ -225,15 +218,14 @@ function DraggableFormField({
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
       className={`border-2 border-gray-200 rounded-lg p-4 mb-3 bg-white shadow-sm hover:shadow-md transition-shadow group relative ${isDragging ? "opacity-50 shadow-lg" : ""}`}
     >
       {/* Hover Action Buttons */}
-      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-1">
+      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-1 z-10">
         <button
           onClick={(e) => {
             e.stopPropagation()
+            e.preventDefault()
             onEdit(field)
           }}
           className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -244,6 +236,7 @@ function DraggableFormField({
         <button
           onClick={(e) => {
             e.stopPropagation()
+            e.preventDefault()
             onDuplicate(field)
           }}
           className="p-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
@@ -254,6 +247,7 @@ function DraggableFormField({
         <button
           onClick={(e) => {
             e.stopPropagation()
+            e.preventDefault()
             onDelete(field.id)
           }}
           className="p-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
@@ -264,7 +258,7 @@ function DraggableFormField({
       </div>
 
       <strong className="text-gray-800 text-lg mb-2 block pr-16">{field.label || field.type}</strong>
-      <div className="mt-2">{renderField()}</div>
+      <div className="mt-2" {...attributes} {...listeners}>{renderField()}</div>
     </div>
   )
 }

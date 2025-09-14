@@ -181,22 +181,59 @@ export default function Home() {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    console.log('Component mounting...')
     setIsMounted(true)
-    // Load initial fields from JSON schema
-    if (formData.fields && formData.fields.length > 0) {
-      setFields(formData.fields)
+    
+    // Try to load from localStorage first, then fallback to JSON schema
+    const savedFields = localStorage.getItem('formBuilderFields')
+    if (savedFields) {
+      try {
+        const parsedFields = JSON.parse(savedFields)
+        setFields(parsedFields)
+        console.log('Loaded fields from localStorage:', parsedFields)
+      } catch (error) {
+        console.error('Error loading from localStorage:', error)
+        // Fallback to JSON schema
+        if (formData.fields && formData.fields.length > 0) {
+          setFields(formData.fields)
+        }
+      }
+    } else {
+      // Load initial fields from JSON schema
+      if (formData.fields && formData.fields.length > 0) {
+        setFields(formData.fields)
+        console.log('Loaded fields from JSON schema:', formData.fields)
+      }
     }
+    
+    console.log('Component mounted successfully!')
   }, [])
+
+  // Save fields to localStorage whenever fields change
+  useEffect(() => {
+    if (isMounted && fields.length > 0) {
+      localStorage.setItem('formBuilderFields', JSON.stringify(fields))
+      console.log('Saved fields to localStorage:', fields)
+    }
+  }, [fields, isMounted])
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event
+    
+    console.log('Drag end event:', { active: active?.id, over: over?.id })
+    console.log('Active data:', active?.data?.current)
 
-    if (!over) return
+    if (!over) {
+      console.log('No drop target')
+      return
+    }
 
     // Check if dropping a new field from sidebar
     if (active.id.startsWith('field-') && over.id === 'form-canvas') {
       const fieldType = active.data.current?.type
       const fieldLabel = active.data.current?.label
+      
+      console.log('Dropping new field:', { fieldType, fieldLabel })
       
       if (fieldType) {
         const newField = {
@@ -207,6 +244,7 @@ export default function Home() {
           required: false,
           columnWidth: "100%",
         }
+        console.log('Adding new field:', newField)
         setFields((prev) => [...prev, newField])
       }
     }
@@ -215,6 +253,8 @@ export default function Home() {
     if (active.id.startsWith('form-field-') && over.id.startsWith('form-field-')) {
       const activeIndex = fields.findIndex(field => field.id === active.id.replace('form-field-', ''))
       const overIndex = fields.findIndex(field => field.id === over.id.replace('form-field-', ''))
+      
+      console.log('Reordering fields:', { activeIndex, overIndex })
       
       if (activeIndex !== overIndex) {
         const updatedFields = [...fields]
@@ -278,20 +318,57 @@ export default function Home() {
     setFormValues((prev: any) => ({ ...prev, [fieldName]: value }))
   }
 
-  if (!isMounted) {
-    return (
-      <div className="h-screen flex flex-col">
-        <Navbar 
-          isPreviewMode={isPreviewMode} 
-          onTogglePreview={togglePreviewMode} 
-        />
-        <div className="flex flex-1">
-          <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Loading...</h2>
-          </div>
-        </div>
-      </div>
-    )
+  // Export current schema as JSON file
+  const handleExportSchema = () => {
+    const schema = {
+      ...formData,
+      fields: fields
+    }
+    
+    const dataStr = JSON.stringify(schema, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'form-schema.json'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    
+    console.log('Exported schema:', schema)
+  }
+
+  // Import schema from JSON file
+  const handleImportSchema = (file: File) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const importedSchema = JSON.parse(e.target?.result as string)
+        if (importedSchema.fields && Array.isArray(importedSchema.fields)) {
+          setFields(importedSchema.fields)
+          console.log('Imported schema:', importedSchema)
+          alert('Schema imported successfully!')
+        } else {
+          alert('Invalid schema format. Please ensure the file contains a "fields" array.')
+        }
+      } catch (error) {
+        console.error('Error importing schema:', error)
+        alert('Error importing schema. Please check the file format.')
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  // Reset to original schema
+  const handleResetSchema = () => {
+    if (confirm('Are you sure you want to reset to the original schema? This will clear all your changes.')) {
+      localStorage.removeItem('formBuilderFields')
+      setFields(formData.fields || [])
+      setSelectedField(null)
+      console.log('Reset to original schema')
+    }
   }
 
   return (
@@ -300,12 +377,19 @@ export default function Home() {
         {/* Navbar */}
         <Navbar 
           isPreviewMode={isPreviewMode} 
-          onTogglePreview={togglePreviewMode} 
+          onTogglePreview={togglePreviewMode}
+          onExportSchema={handleExportSchema}
+          onImportSchema={handleImportSchema}
+          onResetSchema={handleResetSchema}
         />
 
         {/* Main layout */}
         <div className="flex flex-1">
-          {!isPreviewMode && (
+          {!isMounted ? (
+            <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+              <h2 className="text-2xl font-bold mb-6 text-gray-800">Loading...</h2>
+            </div>
+          ) : !isPreviewMode ? (
             <>
               {/* Left Sidebar */}
               <SidebarLeft />
@@ -325,9 +409,7 @@ export default function Home() {
                 onUpdateField={handleUpdateField}
               />
             </>
-          )}
-
-          {isPreviewMode && (
+          ) : (
             <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
               <div className="max-w-2xl mx-auto">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">Form Preview</h2>

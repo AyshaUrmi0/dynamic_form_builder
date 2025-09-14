@@ -16,25 +16,19 @@ const fieldTypes = [
 ]
 
 export default function SidebarLeft() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
   return (
     <aside className="w-48 border-r border-gray-300 p-4 bg-gray-50">
       <h2 className="font-semibold mb-4 text-gray-800 text-lg">Form Fields</h2>
       <div className="space-y-3">
         {fieldTypes.map((field) => (
-          <DraggableField key={field.type} field={field} isMounted={isMounted} />
+          <DraggableField key={field.type} field={field} />
         ))}
       </div>
     </aside>
   )
 }
 
-function DraggableField({ field, isMounted }: { field: { type: string; label: string }, isMounted: boolean }) {
+function DraggableField({ field }: { field: { type: string; label: string } }) {
   const {
     attributes,
     listeners,
@@ -53,14 +47,12 @@ function DraggableField({ field, isMounted }: { field: { type: string; label: st
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
 
-  // Show static version during SSR, draggable version after hydration
-  if (!isMounted) {
-    return (
-      <div className="p-3 border-2 border-gray-300 rounded-lg bg-white text-gray-800 font-medium">
-        {field.label}
-      </div>
-    )
-  }
+  // Debug logging
+  useEffect(() => {
+    if (isDragging) {
+      console.log('Dragging field:', field.type)
+    }
+  }, [isDragging, field.type])
 
   return (
     <div
