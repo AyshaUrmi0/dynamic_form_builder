@@ -1,15 +1,8 @@
 "use client"
 
-
 import type { Metadata } from "next";
-
 import "./globals.css";
-
-
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
-
-
+import { DndContext } from "@dnd-kit/core";
 
 // export const metadata: Metadata = {
 //   title: "Dynamic Form Builder",
@@ -23,9 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      >
-         <DndProvider backend={HTML5Backend}></DndProvider>
+      <body>
         {children}
       </body>
     </html>
