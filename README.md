@@ -182,11 +182,7 @@ Available column widths:
 2. Upload the `out` folder to Netlify
 3. Your form builder is live!
 
-### Other Static Hosts
-- **Vercel**: Connect your GitHub repository
-- **GitHub Pages**: Upload the `out` folder
-- **AWS S3**: Upload static files
-- **Any CDN**: Host the `out` folder contents
+
 
 ## 🤝 **Contributing**
 
@@ -196,9 +192,7 @@ Available column widths:
 4. Push to branch: `git push origin feature-name`
 5. Submit a Pull Request
 
-## 📝 **License**
 
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 **Acknowledgments**
 
@@ -213,6 +207,5 @@ If you have any questions or need help:
 - Open an issue on GitHub
 - Check the live demo: [https://musical-stardust-60e15c.netlify.app/](https://musical-stardust-60e15c.netlify.app/)
 
----
 
-**Made with ❤️ using Next.js 15 and React 19**
+
