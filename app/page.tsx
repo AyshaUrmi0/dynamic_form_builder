@@ -219,7 +219,7 @@ export default function Home() {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event
-    
+
     console.log('Drag end event:', { active: active?.id, over: over?.id })
     console.log('Active data:', active?.data?.current)
 
@@ -229,12 +229,12 @@ export default function Home() {
     }
 
     // Check if dropping a new field from sidebar
-    if (active.id.startsWith('field-') && over.id === 'form-canvas') {
+    if (active.id.startsWith('field-')) {
       const fieldType = active.data.current?.type
       const fieldLabel = active.data.current?.label
-      
-      console.log('Dropping new field:', { fieldType, fieldLabel })
-      
+
+      console.log('Dropping new field:', { fieldType, fieldLabel, dropTarget: over.id })
+
       if (fieldType) {
         const newField = {
           id: Math.random().toString(36).substr(2, 9),
@@ -245,17 +245,41 @@ export default function Home() {
           columnWidth: "100%",
         }
         console.log('Adding new field:', newField)
-        setFields((prev) => [...prev, newField])
+        
+        // If dropping on canvas, add at the end
+        if (over.id === 'form-canvas') {
+          setFields((prev) => [...prev, newField])
+        }
+        // If dropping on an existing field, insert before that field
+        else if (over.id.startsWith('form-field-')) {
+          const targetFieldId = over.id.replace('form-field-', '')
+          const targetIndex = fields.findIndex(field => field.id === targetFieldId)
+          
+          if (targetIndex !== -1) {
+            setFields((prev) => {
+              const newFields = [...prev]
+              newFields.splice(targetIndex, 0, newField)
+              return newFields
+            })
+          } else {
+            // Fallback: add at the end
+            setFields((prev) => [...prev, newField])
+          }
+        }
+        // Fallback: add at the end
+        else {
+          setFields((prev) => [...prev, newField])
+        }
       }
     }
-    
+
     // Check if reordering existing fields
     if (active.id.startsWith('form-field-') && over.id.startsWith('form-field-')) {
       const activeIndex = fields.findIndex(field => field.id === active.id.replace('form-field-', ''))
       const overIndex = fields.findIndex(field => field.id === over.id.replace('form-field-', ''))
-      
+
       console.log('Reordering fields:', { activeIndex, overIndex })
-      
+
       if (activeIndex !== overIndex) {
         const updatedFields = [...fields]
         const [removed] = updatedFields.splice(activeIndex, 1)
