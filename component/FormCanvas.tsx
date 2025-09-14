@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useDroppable } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
@@ -30,9 +30,28 @@ export default function FormCanvas({
   onDeleteField: (fieldId: string) => void
   onDuplicateField: (field: Field) => void
 }) {
+  const [isMounted, setIsMounted] = useState(false)
   const { setNodeRef } = useDroppable({
     id: 'form-canvas',
   })
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return (
+      <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Form Canvas</h2>
+        <div className="min-h-96">
+          <div className="text-center py-12 text-gray-500">
+            <div className="text-6xl mb-4">📝</div>
+            <p className="text-lg">Drag form fields from the sidebar to start building your form</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div ref={setNodeRef} className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
@@ -116,27 +135,71 @@ function DraggableFormField({
       case "select":
         return (
           <select className="border-2 border-gray-300 rounded-lg p-3 w-full bg-white text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-colors">
-            <option>{field.label || "Select an option"}</option>
+            <option>{field.placeholder || "Select an option"}</option>
+            {field.options?.map((option, index) => {
+              const [label, value] = option.split('=')
+              return (
+                <option key={index} value={value || label}>
+                  {label}
+                </option>
+              )
+            })}
           </select>
         )
       case "checkbox":
         return (
-          <div className="flex items-center space-x-2">
-            <input 
-              type="checkbox" 
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" 
-            />
-            <label className="text-gray-800">{field.label}</label>
+          <div className="space-y-2">
+            {field.options?.map((option, index) => {
+              const [label, value] = option.split('=')
+              return (
+                <div key={index} className="flex items-center space-x-2">
+                  <input 
+                    type="checkbox" 
+                    id={`${field.id}-${index}`}
+                    name={field.name}
+                    value={value || label}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" 
+                  />
+                  <label htmlFor={`${field.id}-${index}`} className="text-gray-800">{label}</label>
+                </div>
+              )
+            }) || (
+              <div className="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" 
+                />
+                <label className="text-gray-800">{field.label}</label>
+              </div>
+            )}
           </div>
         )
       case "radio":
         return (
-          <div className="flex items-center space-x-2">
-            <input 
-              type="radio" 
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2" 
-            />
-            <label className="text-gray-800">{field.label}</label>
+          <div className="space-y-2">
+            {field.options?.map((option, index) => {
+              const [label, value] = option.split('=')
+              return (
+                <div key={index} className="flex items-center space-x-2">
+                  <input 
+                    type="radio" 
+                    id={`${field.id}-${index}`}
+                    name={field.name}
+                    value={value || label}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2" 
+                  />
+                  <label htmlFor={`${field.id}-${index}`} className="text-gray-800">{label}</label>
+                </div>
+              )
+            }) || (
+              <div className="flex items-center space-x-2">
+                <input 
+                  type="radio" 
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2" 
+                />
+                <label className="text-gray-800">{field.label}</label>
+              </div>
+            )}
           </div>
         )
       case "file":

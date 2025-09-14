@@ -1,6 +1,7 @@
 "use client"
 
 import { useDraggable } from "@dnd-kit/core";
+import { useEffect, useState } from "react";
 
 const fieldTypes = [
   { type: "text", label: "Text" },
@@ -15,6 +16,30 @@ const fieldTypes = [
 ]
 
 export default function SidebarLeft() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return (
+      <aside className="w-48 border-r border-gray-300 p-4 bg-gray-50">
+        <h2 className="font-semibold mb-4 text-gray-800 text-lg">Form Fields</h2>
+        <div className="space-y-3">
+          {fieldTypes.map((field) => (
+            <div
+              key={field.type}
+              className="p-3 border-2 border-gray-300 rounded-lg bg-white text-gray-800 font-medium"
+            >
+              {field.label}
+            </div>
+          ))}
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <aside className="w-48 border-r border-gray-300 p-4 bg-gray-50">
       <h2 className="font-semibold mb-4 text-gray-800 text-lg">Form Fields</h2>
