@@ -4,25 +4,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import FieldRenderer from "./FieldRenderer"
 import FieldActions from "./FieldActions"
-
-interface Field {
-  id: string
-  type: string
-  label?: string
-  name?: string
-  placeholder?: string
-  required?: boolean
-  options?: string[]
-  content?: string
-  columnWidth?: string
-}
-
-interface DraggableFormFieldProps {
-  field: Field
-  onEdit: (field: Field) => void
-  onDelete: (fieldId: string) => void
-  onDuplicate: (field: Field) => void
-}
+import { DraggableFormFieldProps } from "./types"
 
 export default function DraggableFormField({
   field,

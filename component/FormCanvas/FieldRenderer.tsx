@@ -1,20 +1,6 @@
 "use client"
 
-interface Field {
-  id: string
-  type: string
-  label?: string
-  name?: string
-  placeholder?: string
-  required?: boolean
-  options?: string[]
-  content?: string
-  columnWidth?: string
-}
-
-interface FieldRendererProps {
-  field: Field
-}
+import { FieldRendererProps } from "./types"
 
 export default function FieldRenderer({ field }: FieldRendererProps) {
   const renderField = () => {

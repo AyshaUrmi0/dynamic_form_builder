@@ -4,18 +4,7 @@ import { useEffect } from "react"
 import { useDroppable } from "@dnd-kit/core"
 import DraggableFormField from "./DraggableFormField"
 import EmptyState from "./EmptyState"
-
-interface Field {
-  id: string
-  type: string
-  label?: string
-  name?: string
-  placeholder?: string
-  required?: boolean
-  options?: string[]
-  content?: string
-  columnWidth?: string
-}
+import { FormCanvasProps } from "./types"
 
 export default function FormCanvas({ 
   formData, 
@@ -23,13 +12,7 @@ export default function FormCanvas({
   onEditField, 
   onDeleteField, 
   onDuplicateField 
-}: { 
-  formData: any
-  fields: Field[]
-  onEditField: (field: Field) => void
-  onDeleteField: (fieldId: string) => void
-  onDuplicateField: (field: Field) => void
-}) {
+}: FormCanvasProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: 'form-canvas',
   })
