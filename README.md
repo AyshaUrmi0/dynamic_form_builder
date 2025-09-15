@@ -1,6 +1,6 @@
 # 🚀 Dynamic Form Builder
 
-A powerful, drag-and-drop form builder built with Next.js 15, React 19, and TypeScript. Create beautiful, responsive forms with ease using an intuitive visual interface.
+A powerful, drag-and-drop form builder built with Next.js 15, React 19, TypeScript and dnd kit. Create beautiful, responsive forms with ease using an intuitive visual interface.
 
 ## 🌐 Live Demo
 
@@ -194,12 +194,7 @@ Available column widths:
 
 
 
-## 🙏 **Acknowledgments**
 
-- Built with [Next.js](https://nextjs.org/)
-- Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Drag & drop powered by [@dnd-kit](https://dndkit.com/)
-- Deployed on [Netlify](https://netlify.com/)
 
 ## 📞 **Support**
 
